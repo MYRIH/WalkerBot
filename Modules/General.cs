@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -16,11 +18,17 @@ namespace WalkerBot.Modules
         public General(ILogger<General> NewLogger)
             => Logger = NewLogger;
 
-        [Command("ping")]
-        public async Task Ping()
+        [Command("purge")]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
+        public async Task Purge(int AmountToPurge)
         {
-            await Context.Channel.SendMessageAsync("Pong");
-            Logger.LogInformation($"{Context.User.Username} executed the ping command");
+            var MessagesToPurge = await Context.Channel.GetMessagesAsync(AmountToPurge + 1).FlattenAsync();
+            await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(MessagesToPurge);
+
+            var ConfirmationMessage = await Context.Channel.SendMessageAsync($"{MessagesToPurge.Count()} messages deleted successfully");
+            await Task.Delay(2500);
+            await ConfirmationMessage.DeleteAsync();
+            Logger.LogInformation($"{Context.User.Username} executed the purge command");
         }
 
         [Command("info")]
@@ -58,24 +66,202 @@ namespace WalkerBot.Modules
             Logger.LogInformation($"{Context.User.Username} executed the info command");
         }
 
-        [Command("purge")]
-        [RequireUserPermission(GuildPermission.ManageMessages)]
-        public async Task Purge(int AmountToPurge)
-        {
-            var MessagesToPurge = await Context.Channel.GetMessagesAsync(AmountToPurge + 1).FlattenAsync();
-            await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(MessagesToPurge);
-
-            var ConfirmationMessage = await Context.Channel.SendMessageAsync($"{MessagesToPurge.Count()} messages deleted successfully");
-            await Task.Delay(2500);
-            await ConfirmationMessage.DeleteAsync();
-            Logger.LogInformation($"{Context.User.Username} executed the purge command");
-        }
-
         [Command("atd")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         public async Task Attendance(int ClassArg)
         {
-            List<SocketGuildUser> ListOfStudents;
+            var embed = new EmbedBuilder();
+            SocketGuild guild = Context.Guild;
+            var users = guild.Users;
+            List<SocketGuildUser> Students = new List<SocketGuildUser> { };
+            List<string> ValidStudents = new List<string> { };
+            string FilePath = @"C:\Dev\WalkerBot\WalkerBot\Students.txt";
+
+            if (ClassArg == 40)
+            {
+                var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-40");
+
+                foreach (SocketGuildUser user in users)
+                {
+                    if (user.Roles.Contains(role) && !user.IsBot)
+                    {
+                        Students.Add(user);
+                    }
+                }
+                foreach (SocketGuildUser Student in Students)
+                {
+                    if (Student.Nickname != null)
+                    {
+                        ValidStudents.Add(Student.Nickname);
+                    }
+                    else ValidStudents.Add(Student.Username);
+                }
+                ValidStudents.Sort();
+                using (var sw = new StreamWriter(FilePath, false))
+                {
+                    foreach (string temp in ValidStudents)
+                    {
+                        await sw.WriteLineAsync(temp);
+                    }
+                }
+
+                await Context.Channel.SendFileAsync(FilePath);
+            }
+
+            if (ClassArg == 41)
+            {
+                var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-41");
+
+                foreach (SocketGuildUser user in users)
+                {
+                    if (user.Roles.Contains(role) && !user.IsBot)
+                    {
+                        Students.Add(user);
+                    }
+                }
+                foreach (SocketGuildUser Student in Students)
+                {
+                    if (Student.Nickname != null)
+                    {
+                        ValidStudents.Add(Student.Nickname);
+                    }
+                    else ValidStudents.Add(Student.Username);
+                }
+                ValidStudents.Sort();
+                using (var sw = new StreamWriter(FilePath, false))
+                {
+                    foreach (string temp in ValidStudents)
+                    {
+                        await sw.WriteLineAsync(temp);
+                    }
+                }
+
+                await Context.Channel.SendFileAsync(FilePath);
+            }
+
+            if (ClassArg == 26)
+            {
+                var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-26");
+
+                foreach (SocketGuildUser user in users)
+                {
+                    if (user.Roles.Contains(role) && !user.IsBot)
+                    {
+                        Students.Add(user);
+                    }
+                }
+                foreach (SocketGuildUser Student in Students)
+                {
+                    if (Student.Nickname != null)
+                    {
+                        ValidStudents.Add(Student.Nickname);
+                    }
+                    else ValidStudents.Add(Student.Username);
+                }
+                ValidStudents.Sort();
+                using (var sw = new StreamWriter(FilePath, false))
+                {
+                    foreach (string temp in ValidStudents)
+                    {
+                        await sw.WriteLineAsync(temp);
+                    }
+                }
+
+                await Context.Channel.SendFileAsync(FilePath);
+            }
+
+            if (ClassArg == 45)
+            {
+                var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-45");
+
+                foreach (SocketGuildUser user in users)
+                {
+                    if (user.Roles.Contains(role) && !user.IsBot)
+                    {
+                        Students.Add(user);
+                    }
+                }
+                foreach (SocketGuildUser Student in Students)
+                {
+                    if (Student.Nickname != null)
+                    {
+                        ValidStudents.Add(Student.Nickname);
+                    }
+                    else ValidStudents.Add(Student.Username);
+                }
+                ValidStudents.Sort();
+                using (var sw = new StreamWriter(FilePath, false))
+                {
+                    foreach (string temp in ValidStudents)
+                    {
+                        await sw.WriteLineAsync(temp);
+                    }
+                }
+
+                await Context.Channel.SendFileAsync(FilePath);
+            }
+
+            if (ClassArg == 1)
+            {
+                var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-1");
+
+                foreach (SocketGuildUser user in users)
+                {
+                    if (user.Roles.Contains(role) && !user.IsBot)
+                    {
+                        Students.Add(user);
+                    }
+                }
+                foreach (SocketGuildUser Student in Students)
+                {
+                    if (Student.Nickname != null)
+                    {
+                        ValidStudents.Add(Student.Nickname);
+                    }
+                    else ValidStudents.Add(Student.Username);
+                }
+                ValidStudents.Sort();
+                using (var sw = new StreamWriter(FilePath, false))
+                {
+                    foreach (string temp in ValidStudents)
+                    {
+                        await sw.WriteLineAsync(temp);
+                    }
+                }
+
+                await Context.Channel.SendFileAsync(FilePath);
+            }
+
+            if (ClassArg == 50)
+            {
+                var role = guild.Roles.FirstOrDefault(x => x.Name == "IS-50");
+
+                foreach (SocketGuildUser user in users)
+                {
+                    if (user.Roles.Contains(role) && !user.IsBot)
+                    {
+                        Students.Add(user);
+                    }
+                }
+                foreach (SocketGuildUser Student in Students)
+                {
+                    if (Student.Nickname != null)
+                    {
+                        ValidStudents.Add(Student.Nickname);
+                    }
+                    else ValidStudents.Add(Student.Username);
+                }
+                ValidStudents.Sort();
+                using (var sw = new StreamWriter(FilePath, false))
+                {
+                    foreach (string temp in ValidStudents)
+                    {
+                        await sw.WriteLineAsync(temp);
+                    }
+                }
+
+                await Context.Channel.SendFileAsync(FilePath);
+            }
         }
     }
 }

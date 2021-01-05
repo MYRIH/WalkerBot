@@ -46,7 +46,7 @@ namespace WalkerBot
                 {
                     Config.CaseSensitiveCommands = false;
                     Config.LogLevel = LogSeverity.Verbose;
-                    Config.DefaultRunMode = RunMode.Sync;
+                    Config.DefaultRunMode = RunMode.Async;
                 })
                 .ConfigureServices((context, Services) =>
                 {
