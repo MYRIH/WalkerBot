@@ -230,7 +230,7 @@ namespace WalkerBot.Modules
                         await sw.WriteLineAsync(temp);
                     }
                 }
-
+                Valid41Students.Clear();
                 await Context.Channel.SendFileAsync(FilePath41);
             }
             else if (ClassArg == 45)
@@ -272,7 +272,7 @@ namespace WalkerBot.Modules
                         await sw.WriteLineAsync(temp);
                     }
                 }
-
+                Valid45Students.Clear();
                 await Context.Channel.SendFileAsync(FilePath45);
             }
             else if (ClassArg == 1)
@@ -314,7 +314,7 @@ namespace WalkerBot.Modules
                         await sw.WriteLineAsync(temp);
                     }
                 }
-
+                Valid1Students.Clear();
                 await Context.Channel.SendFileAsync(FilePath1);
             }
             else if (ClassArg == 50)
@@ -356,7 +356,7 @@ namespace WalkerBot.Modules
                         await sw.WriteLineAsync(temp);
                     }
                 }
-
+                Valid50Students.Clear();
                 await Context.Channel.SendFileAsync(FilePath50);
             }
         }
