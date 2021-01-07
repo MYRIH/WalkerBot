@@ -13,10 +13,127 @@ namespace WalkerBot.Modules
 {
     public class General : ModuleBase<SocketCommandContext>
     {
+        public static List<string> Valid41Students = new List<string> { };
+        public static List<string> Valid45Students = new List<string> { };
+        public static List<string> Valid26Students = new List<string> { };
+        public static List<string> Valid1Students = new List<string> { };
+        public static List<string> Valid50Students = new List<string> { };
+
         private readonly ILogger<General> Logger;
+
+        public string FilePath41 = @"C:\Dev\WalkerBot\WalkerBot\41Students.txt";
+        public string FilePath45 = @"C:\Dev\WalkerBot\WalkerBot\45Students.txt";
+        public string FilePath1 = @"C:\Dev\WalkerBot\WalkerBot\1Students.txt";
+        public string FilePath50 = @"C:\Dev\WalkerBot\WalkerBot\50Students.txt";
 
         public General(ILogger<General> NewLogger)
             => Logger = NewLogger;
+
+        [Command("here")]
+        public async Task Here()
+        {
+            var GuildUser = Context.User as SocketGuildUser;
+            if (GuildUser.Roles.Contains(Context.Guild.Roles.FirstOrDefault(x => x.Name == "CSCI-41")))
+            {
+                if (GuildUser.Nickname != null)
+                {
+                    if (Valid41Students.Contains(GuildUser.Nickname))
+                    {
+                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                    }
+                    else if (!Valid41Students.Contains(GuildUser.Nickname))
+                    {
+                        Valid41Students.Add(GuildUser.Nickname);
+                    }
+                }
+                else
+                {
+                    if (Valid41Students.Contains(GuildUser.Username))
+                    {
+                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                    }
+                    else if (!Valid41Students.Contains(GuildUser.Username))
+                    {
+                        Valid41Students.Add(GuildUser.Username);
+                    }
+                }
+            }
+            else if (GuildUser.Roles.Contains(Context.Guild.Roles.FirstOrDefault(x => x.Name == "CSCI-45")))
+            {
+                if (GuildUser.Nickname != null)
+                {
+                    if (Valid45Students.Contains(GuildUser.Nickname))
+                    {
+                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                    }
+                    else if (!Valid45Students.Contains(GuildUser.Nickname))
+                    {
+                        Valid45Students.Add(GuildUser.Nickname);
+                    }
+                }
+                else
+                {
+                    if (Valid45Students.Contains(GuildUser.Username))
+                    {
+                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                    }
+                    else if (!Valid45Students.Contains(GuildUser.Username))
+                    {
+                        Valid45Students.Add(GuildUser.Username);
+                    }
+                }
+            }
+            else if (GuildUser.Roles.Contains(Context.Guild.Roles.FirstOrDefault(x => x.Name == "CSCI-1")))
+            {
+                if (GuildUser.Nickname != null)
+                {
+                    if (Valid1Students.Contains(GuildUser.Nickname))
+                    {
+                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                    }
+                    else if (!Valid1Students.Contains(GuildUser.Nickname))
+                    {
+                        Valid1Students.Add(GuildUser.Nickname);
+                    }
+                }
+                else
+                {
+                    if (Valid1Students.Contains(GuildUser.Username))
+                    {
+                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                    }
+                    else if (!Valid1Students.Contains(GuildUser.Username))
+                    {
+                        Valid1Students.Add(GuildUser.Username);
+                    }
+                }
+            }
+            else if (GuildUser.Roles.Contains(Context.Guild.Roles.FirstOrDefault(x => x.Name == "IS-50")))
+            {
+                if (GuildUser.Nickname != null)
+                {
+                    if (Valid50Students.Contains(GuildUser.Nickname))
+                    {
+                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                    }
+                    else if (!Valid50Students.Contains(GuildUser.Nickname))
+                    {
+                        Valid50Students.Add(GuildUser.Nickname);
+                    }
+                }
+                else
+                {
+                    if (Valid50Students.Contains(GuildUser.Username))
+                    {
+                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                    }
+                    else if (!Valid50Students.Contains(GuildUser.Username))
+                    {
+                        Valid50Students.Add(GuildUser.Username);
+                    }
+                }
+            }
+        }
 
         [Command("purge")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
@@ -70,197 +187,177 @@ namespace WalkerBot.Modules
         [RequireUserPermission(GuildPermission.ManageMessages)]
         public async Task Attendance(int ClassArg)
         {
-            var embed = new EmbedBuilder();
+            var LastMessage = await Context.Channel.SendMessageAsync("Getting Attendance");
             SocketGuild guild = Context.Guild;
             var users = guild.Users;
-            List<SocketGuildUser> Students = new List<SocketGuildUser> { };
-            List<string> ValidStudents = new List<string> { };
-            string FilePath = @"C:\Dev\WalkerBot\WalkerBot\Students.txt";
-
-            if (ClassArg == 40)
-            {
-                var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-40");
-
-                foreach (SocketGuildUser user in users)
-                {
-                    if (user.Roles.Contains(role) && !user.IsBot)
-                    {
-                        Students.Add(user);
-                    }
-                }
-                foreach (SocketGuildUser Student in Students)
-                {
-                    if (Student.Nickname != null)
-                    {
-                        ValidStudents.Add(Student.Nickname);
-                    }
-                    else ValidStudents.Add(Student.Username);
-                }
-                ValidStudents.Sort();
-                using (var sw = new StreamWriter(FilePath, false))
-                {
-                    foreach (string temp in ValidStudents)
-                    {
-                        await sw.WriteLineAsync(temp);
-                    }
-                }
-
-                await Context.Channel.SendFileAsync(FilePath);
-            }
 
             if (ClassArg == 41)
             {
+                //await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-41");
+                ulong LectureChannel = 795497257671196683;
+                //ulong HelpChannel = 795497568112607242;
+                int limit = 150;
+                var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
+                //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
+                if (ChannelMessages != null)
+                {
+                    foreach (var msg in ChannelMessages)
+                    {
+                        var user = (msg.Author as SocketGuildUser);
+                        if (Valid41Students.Contains(user.Username) || Valid41Students.Contains(user.Nickname))
+                            continue;
+                        else
+                        {
+                            if (user.Roles.Contains(role) && !user.IsBot)
+                            {
+                                if (user.Nickname != null)
+                                {
+                                    Valid41Students.Add(user.Nickname);
+                                }
+                                else { Valid41Students.Add(user.Username); }
+                            }
+                        }
+                    }
+                }
 
-                foreach (SocketGuildUser user in users)
+                // await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
+                Valid41Students.Sort();
+                using (var sw = new StreamWriter(FilePath41, true))
                 {
-                    if (user.Roles.Contains(role) && !user.IsBot)
-                    {
-                        Students.Add(user);
-                    }
-                }
-                foreach (SocketGuildUser Student in Students)
-                {
-                    if (Student.Nickname != null)
-                    {
-                        ValidStudents.Add(Student.Nickname);
-                    }
-                    else ValidStudents.Add(Student.Username);
-                }
-                ValidStudents.Sort();
-                using (var sw = new StreamWriter(FilePath, false))
-                {
-                    foreach (string temp in ValidStudents)
-                    {
-                        await sw.WriteLineAsync(temp);
-                    }
-                }
-
-                await Context.Channel.SendFileAsync(FilePath);
-            }
-
-            if (ClassArg == 26)
-            {
-                var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-26");
-
-                foreach (SocketGuildUser user in users)
-                {
-                    if (user.Roles.Contains(role) && !user.IsBot)
-                    {
-                        Students.Add(user);
-                    }
-                }
-                foreach (SocketGuildUser Student in Students)
-                {
-                    if (Student.Nickname != null)
-                    {
-                        ValidStudents.Add(Student.Nickname);
-                    }
-                    else ValidStudents.Add(Student.Username);
-                }
-                ValidStudents.Sort();
-                using (var sw = new StreamWriter(FilePath, false))
-                {
-                    foreach (string temp in ValidStudents)
+                    foreach (string temp in Valid41Students)
                     {
                         await sw.WriteLineAsync(temp);
                     }
                 }
 
-                await Context.Channel.SendFileAsync(FilePath);
+                await Context.Channel.SendFileAsync(FilePath41);
             }
-
-            if (ClassArg == 45)
+            else if (ClassArg == 45)
             {
+                //await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-45");
+                ulong LectureChannel = 795497409873838121;
+                //ulong HelpChannel = 795497568112607242;
+                int limit = 150;
+                var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
+                //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
+                if (ChannelMessages != null)
+                {
+                    foreach (var msg in ChannelMessages)
+                    {
+                        var user = (msg.Author as SocketGuildUser);
+                        if (Valid45Students.Contains(user.Username) || Valid45Students.Contains(user.Nickname))
+                            continue;
+                        else
+                        {
+                            if (user.Roles.Contains(role) && !user.IsBot)
+                            {
+                                if (user.Nickname != null)
+                                {
+                                    Valid45Students.Add(user.Nickname);
+                                }
+                                else { Valid45Students.Add(user.Username); }
+                            }
+                        }
+                    }
+                }
 
-                foreach (SocketGuildUser user in users)
+                // await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
+                Valid45Students.Sort();
+                using (var sw = new StreamWriter(FilePath45, false))
                 {
-                    if (user.Roles.Contains(role) && !user.IsBot)
-                    {
-                        Students.Add(user);
-                    }
-                }
-                foreach (SocketGuildUser Student in Students)
-                {
-                    if (Student.Nickname != null)
-                    {
-                        ValidStudents.Add(Student.Nickname);
-                    }
-                    else ValidStudents.Add(Student.Username);
-                }
-                ValidStudents.Sort();
-                using (var sw = new StreamWriter(FilePath, false))
-                {
-                    foreach (string temp in ValidStudents)
+                    foreach (string temp in Valid45Students)
                     {
                         await sw.WriteLineAsync(temp);
                     }
                 }
 
-                await Context.Channel.SendFileAsync(FilePath);
+                await Context.Channel.SendFileAsync(FilePath45);
             }
-
-            if (ClassArg == 1)
+            else if (ClassArg == 1)
             {
+                //await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-1");
+                ulong LectureChannel = 795497373001711626;
+                //ulong HelpChannel = 795497568112607242;
+                int limit = 150;
+                var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
+                //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
+                if (ChannelMessages != null)
+                {
+                    foreach (var msg in ChannelMessages)
+                    {
+                        var user = (msg.Author as SocketGuildUser);
+                        if (Valid1Students.Contains(user.Username) || Valid1Students.Contains(user.Nickname))
+                            continue;
+                        else
+                        {
+                            if (user.Roles.Contains(role) && !user.IsBot)
+                            {
+                                if (user.Nickname != null)
+                                {
+                                    Valid1Students.Add(user.Nickname);
+                                }
+                                else { Valid1Students.Add(user.Username); }
+                            }
+                        }
+                    }
+                }
 
-                foreach (SocketGuildUser user in users)
+                // await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
+                Valid1Students.Sort();
+                using (var sw = new StreamWriter(FilePath45, true))
                 {
-                    if (user.Roles.Contains(role) && !user.IsBot)
-                    {
-                        Students.Add(user);
-                    }
-                }
-                foreach (SocketGuildUser Student in Students)
-                {
-                    if (Student.Nickname != null)
-                    {
-                        ValidStudents.Add(Student.Nickname);
-                    }
-                    else ValidStudents.Add(Student.Username);
-                }
-                ValidStudents.Sort();
-                using (var sw = new StreamWriter(FilePath, false))
-                {
-                    foreach (string temp in ValidStudents)
+                    foreach (string temp in Valid1Students)
                     {
                         await sw.WriteLineAsync(temp);
                     }
                 }
 
-                await Context.Channel.SendFileAsync(FilePath);
+                await Context.Channel.SendFileAsync(FilePath1);
             }
-
-            if (ClassArg == 50)
+            else if (ClassArg == 50)
             {
+                //await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "IS-50");
+                ulong LectureChannel = 795497426596921384;
+                //ulong HelpChannel = 795497568112607242;
+                int limit = 150;
+                var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
+                //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
+                if (ChannelMessages != null)
+                {
+                    foreach (var msg in ChannelMessages)
+                    {
+                        var user = (msg.Author as SocketGuildUser);
+                        if (Valid50Students.Contains(user.Username) || Valid50Students.Contains(user.Nickname))
+                            continue;
+                        else
+                        {
+                            if (user.Roles.Contains(role) && !user.IsBot)
+                            {
+                                if (user.Nickname != null)
+                                {
+                                    Valid50Students.Add(user.Nickname);
+                                }
+                                else { Valid50Students.Add(user.Username); }
+                            }
+                        }
+                    }
+                }
 
-                foreach (SocketGuildUser user in users)
+                // await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
+                Valid50Students.Sort();
+                using (var sw = new StreamWriter(FilePath50, true))
                 {
-                    if (user.Roles.Contains(role) && !user.IsBot)
-                    {
-                        Students.Add(user);
-                    }
-                }
-                foreach (SocketGuildUser Student in Students)
-                {
-                    if (Student.Nickname != null)
-                    {
-                        ValidStudents.Add(Student.Nickname);
-                    }
-                    else ValidStudents.Add(Student.Username);
-                }
-                ValidStudents.Sort();
-                using (var sw = new StreamWriter(FilePath, false))
-                {
-                    foreach (string temp in ValidStudents)
+                    foreach (string temp in Valid50Students)
                     {
                         await sw.WriteLineAsync(temp);
                     }
                 }
 
-                await Context.Channel.SendFileAsync(FilePath);
+                await Context.Channel.SendFileAsync(FilePath50);
             }
         }
     }
