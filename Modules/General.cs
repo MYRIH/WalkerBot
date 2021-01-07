@@ -281,7 +281,7 @@ namespace WalkerBot.Modules
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-1");
                 ulong LectureChannel = 795497373001711626;
                 //ulong HelpChannel = 795497568112607242;
-                int limit = 150;
+                int limit = 50;
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 if (ChannelMessages != null)
@@ -323,7 +323,7 @@ namespace WalkerBot.Modules
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "IS-50");
                 ulong LectureChannel = 795497426596921384;
                 //ulong HelpChannel = 795497568112607242;
-                int limit = 150;
+                int limit = 45;
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 if (ChannelMessages != null)
