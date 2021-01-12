@@ -15,9 +15,13 @@ namespace WalkerBot.Modules
     {
         public static List<string> Valid41Students = new List<string> { };
         public static List<string> Valid45Students = new List<string> { };
-        public static List<string> Valid26Students = new List<string> { };
         public static List<string> Valid1Students = new List<string> { };
         public static List<string> Valid50Students = new List<string> { };
+
+        public static List<string> Messages45 = new List<string> { };
+        public static List<string> Messages41 = new List<string> { };
+        public static List<string> Messages50 = new List<string> { };
+        public static List<string> Messages1 = new List<string> { };
 
         private readonly ILogger<General> Logger;
 
@@ -193,16 +197,31 @@ namespace WalkerBot.Modules
 
             if (ClassArg == 41)
             {
-                //await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-41");
                 ulong LectureChannel = 795497257671196683;
-                //ulong HelpChannel = 795497568112607242;
-                int limit = 150;
+                ulong HelpChannel = 795497568112607242;
+                int limit = 200;
+
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
-                //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
-                if (ChannelMessages != null)
+                var templist = ChannelMessages.ToList();
+                templist.AddRange(await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync());
+
+                List<IMessage> Valid41Messages = new List<IMessage> { };
+                foreach (var msg in templist)
                 {
-                    foreach (var msg in ChannelMessages)
+                    if (Messages41.Contains(msg.Content))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Valid41Messages.Add(msg);
+                    }
+                }
+
+                if (Valid41Messages != null)
+                {
+                    foreach (var msg in Valid41Messages)
                     {
                         var user = (msg.Author as SocketGuildUser);
                         if (Valid41Students.Contains(user.Username) || Valid41Students.Contains(user.Nickname))
@@ -220,10 +239,13 @@ namespace WalkerBot.Modules
                         }
                     }
                 }
+                foreach (var msg in templist)
+                {
+                    Messages41.Add(msg.ToString());
+                }
 
-                // await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 Valid41Students.Sort();
-                using (var sw = new StreamWriter(FilePath41, true))
+                using (var sw = new StreamWriter(FilePath41, false))
                 {
                     foreach (string temp in Valid41Students)
                     {
@@ -235,16 +257,31 @@ namespace WalkerBot.Modules
             }
             else if (ClassArg == 45)
             {
-                //await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-45");
                 ulong LectureChannel = 795497409873838121;
-                //ulong HelpChannel = 795497568112607242;
-                int limit = 150;
+                ulong HelpChannel = 795497584562929664;
+                int limit = 200;
+
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
-                //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
-                if (ChannelMessages != null)
+                var templist = ChannelMessages.ToList();
+                templist.AddRange(await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync());
+
+                List<IMessage> Valid45Messages = new List<IMessage> { };
+                foreach (var msg in templist)
                 {
-                    foreach (var msg in ChannelMessages)
+                    if (Messages45.Contains(msg.Content))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Valid45Messages.Add(msg);
+                    }
+                }
+
+                if (Valid45Messages != null)
+                {
+                    foreach (var msg in Valid45Messages)
                     {
                         var user = (msg.Author as SocketGuildUser);
                         if (Valid45Students.Contains(user.Username) || Valid45Students.Contains(user.Nickname))
@@ -263,7 +300,11 @@ namespace WalkerBot.Modules
                     }
                 }
 
-                // await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
+                foreach (var msg in templist)
+                {
+                    Messages45.Add(msg.ToString());
+                }
+
                 Valid45Students.Sort();
                 using (var sw = new StreamWriter(FilePath45, false))
                 {
@@ -277,16 +318,31 @@ namespace WalkerBot.Modules
             }
             else if (ClassArg == 1)
             {
-                //await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-1");
                 ulong LectureChannel = 795497373001711626;
-                //ulong HelpChannel = 795497568112607242;
-                int limit = 50;
+                ulong HelpChannel = 795497526299590696;
+                int limit = 200;
+
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
-                //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
-                if (ChannelMessages != null)
+                var templist = ChannelMessages.ToList();
+                templist.AddRange(await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync());
+
+                List<IMessage> Valid1Messages = new List<IMessage> { };
+                foreach (var msg in templist)
                 {
-                    foreach (var msg in ChannelMessages)
+                    if (Messages1.Contains(msg.Content))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Valid1Messages.Add(msg);
+                    }
+                }
+
+                if (Valid1Messages != null)
+                {
+                    foreach (var msg in Valid1Messages)
                     {
                         var user = (msg.Author as SocketGuildUser);
                         if (Valid1Students.Contains(user.Username) || Valid1Students.Contains(user.Nickname))
@@ -304,10 +360,14 @@ namespace WalkerBot.Modules
                         }
                     }
                 }
+                foreach (var msg in templist)
+                {
+                    Messages1.Add(msg.ToString());
+                }
 
                 // await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 Valid1Students.Sort();
-                using (var sw = new StreamWriter(FilePath45, true))
+                using (var sw = new StreamWriter(FilePath1, false))
                 {
                     foreach (string temp in Valid1Students)
                     {
@@ -322,13 +382,28 @@ namespace WalkerBot.Modules
                 //await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "IS-50");
                 ulong LectureChannel = 795497426596921384;
-                //ulong HelpChannel = 795497568112607242;
-                int limit = 45;
+                ulong HelpChannel = 795497599598723114;
+                int limit = 100;
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
-                //ChannelMessages = await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
-                if (ChannelMessages != null)
+                var templist = ChannelMessages.ToList();
+                templist.AddRange(await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync());
+
+                List<IMessage> Valid50Messages = new List<IMessage> { };
+                foreach (var msg in templist)
                 {
-                    foreach (var msg in ChannelMessages)
+                    if (Messages50.Contains(msg.Content))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Valid50Messages.Add(msg);
+                    }
+                }
+
+                if (Valid50Messages != null)
+                {
+                    foreach (var msg in Valid50Messages)
                     {
                         var user = (msg.Author as SocketGuildUser);
                         if (Valid50Students.Contains(user.Username) || Valid50Students.Contains(user.Nickname))
@@ -346,10 +421,13 @@ namespace WalkerBot.Modules
                         }
                     }
                 }
+                foreach (var msg in templist)
+                {
+                    Messages50.Add(msg.ToString());
+                }
 
-                // await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 Valid50Students.Sort();
-                using (var sw = new StreamWriter(FilePath50, true))
+                using (var sw = new StreamWriter(FilePath50, false))
                 {
                     foreach (string temp in Valid50Students)
                     {
