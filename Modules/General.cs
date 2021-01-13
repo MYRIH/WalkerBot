@@ -11,8 +11,40 @@ using Microsoft.Extensions.Logging;
 
 namespace WalkerBot.Modules
 {
+    public class Student
+    {
+        private string Name;
+        private int Cumulative;
+
+        public Student(string NewName, int NewCumulative)
+        {
+            Name = NewName;
+            Cumulative = NewCumulative;
+        }
+
+        public string GetName()
+        {
+            return Name;
+        }
+
+        public int GetCumulative()
+        {
+            return Cumulative;
+        }
+
+        public int SetCumulative(int NewCumulative)
+        {
+            return Cumulative = NewCumulative;
+        }
+    }
+
     public class General : ModuleBase<SocketCommandContext>
     {
+        public static List<Student> Students45 = new List<Student> { };
+        public static List<Student> Students41 = new List<Student> { };
+        public static List<Student> Students50 = new List<Student> { };
+        public static List<Student> Students1 = new List<Student> { };
+
         public static List<string> Valid41Students = new List<string> { };
         public static List<string> Valid45Students = new List<string> { };
         public static List<string> Valid1Students = new List<string> { };
@@ -29,6 +61,11 @@ namespace WalkerBot.Modules
         public string FilePath45 = @"C:\Dev\WalkerBot\WalkerBot\45Students.txt";
         public string FilePath1 = @"C:\Dev\WalkerBot\WalkerBot\1Students.txt";
         public string FilePath50 = @"C:\Dev\WalkerBot\WalkerBot\50Students.txt";
+
+        public string FilePath41Cumul = @"C:\Dev\WalkerBot\WalkerBot\41StudentsCumul.txt";
+        public string FilePath45Cumul = @"C:\Dev\WalkerBot\WalkerBot\45StudentsCumul.txt";
+        public string FilePath1Cumul = @"C:\Dev\WalkerBot\WalkerBot\1StudentsCumul.txt";
+        public string FilePath50Cumul = @"C:\Dev\WalkerBot\WalkerBot\50StudentsCumul.txt";
 
         public General(ILogger<General> NewLogger)
             => Logger = NewLogger;
@@ -187,6 +224,60 @@ namespace WalkerBot.Modules
             Logger.LogInformation($"{Context.User.Username} executed the info command");
         }
 
+        [Command("cumul")]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
+        public async Task Cumulative(int ClassArg)
+        {
+            if (ClassArg == 41)
+            {
+                Students41.Sort();
+                using (var sw = new StreamWriter(FilePath41Cumul, false))
+                {
+                    foreach (Student temp in Students41)
+                    {
+                        await sw.WriteLineAsync(temp.GetName() + temp.GetCumulative());
+                    }
+                }
+                await Context.Channel.SendFileAsync(FilePath41Cumul);
+            }
+            if (ClassArg == 45)
+            {
+                Students45.Sort();
+                using (var sw = new StreamWriter(FilePath45Cumul, false))
+                {
+                    foreach (Student temp in Students45)
+                    {
+                        await sw.WriteLineAsync(temp.GetName() + temp.GetCumulative());
+                    }
+                }
+                await Context.Channel.SendFileAsync(FilePath45Cumul);
+            }
+            if (ClassArg == 1)
+            {
+                Students1.Sort();
+                using (var sw = new StreamWriter(FilePath1Cumul, false))
+                {
+                    foreach (Student temp in Students1)
+                    {
+                        await sw.WriteLineAsync(temp.GetName() + temp.GetCumulative());
+                    }
+                }
+                await Context.Channel.SendFileAsync(FilePath1Cumul);
+            }
+            if (ClassArg == 50)
+            {
+                Students50.Sort();
+                using (var sw = new StreamWriter(FilePath50Cumul, false))
+                {
+                    foreach (Student temp in Students41)
+                    {
+                        await sw.WriteLineAsync(temp.GetName() + temp.GetCumulative());
+                    }
+                }
+                await Context.Channel.SendFileAsync(FilePath50Cumul);
+            }
+        }
+
         [Command("atd")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         public async Task Attendance(int ClassArg)
@@ -200,7 +291,7 @@ namespace WalkerBot.Modules
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-41");
                 ulong LectureChannel = 795497257671196683;
                 ulong HelpChannel = 795497568112607242;
-                int limit = 200;
+                int limit = 350;
 
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 var templist = ChannelMessages.ToList();
@@ -232,9 +323,37 @@ namespace WalkerBot.Modules
                             {
                                 if (user.Nickname != null)
                                 {
+                                    Student temp = new Student(user.Nickname, 1);
+                                    var match = Students41.Find(check => check.GetName() == temp.GetName());
+                                    if (match != null)
+                                    {
+                                        int newcum = match.GetCumulative();
+                                        newcum++;
+                                        match.SetCumulative(newcum);
+                                    }
+                                    else
+                                    {
+                                        Students41.Add(temp);
+                                    }
+
                                     Valid41Students.Add(user.Nickname);
                                 }
-                                else { Valid41Students.Add(user.Username); }
+                                else
+                                {
+                                    Student temp = new Student(user.Username, 1);
+                                    var match = Students41.Find(check => check.GetName() == temp.GetName());
+                                    if (match != null)
+                                    {
+                                        int newcum = match.GetCumulative();
+                                        newcum++;
+                                        match.SetCumulative(newcum);
+                                    }
+                                    else
+                                    {
+                                        Students41.Add(temp);
+                                    }
+                                    Valid41Students.Add(user.Username);
+                                }
                             }
                         }
                     }
@@ -260,7 +379,7 @@ namespace WalkerBot.Modules
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-45");
                 ulong LectureChannel = 795497409873838121;
                 ulong HelpChannel = 795497584562929664;
-                int limit = 200;
+                int limit = 350;
 
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 var templist = ChannelMessages.ToList();
@@ -292,9 +411,36 @@ namespace WalkerBot.Modules
                             {
                                 if (user.Nickname != null)
                                 {
+                                    Student temp = new Student(user.Nickname, 1);
+                                    var match = Students45.Find(check => check.GetName() == temp.GetName());
+                                    if (match != null)
+                                    {
+                                        int newcum = match.GetCumulative();
+                                        newcum++;
+                                        match.SetCumulative(newcum);
+                                    }
+                                    else
+                                    {
+                                        Students45.Add(temp);
+                                    }
                                     Valid45Students.Add(user.Nickname);
                                 }
-                                else { Valid45Students.Add(user.Username); }
+                                else
+                                {
+                                    Student temp = new Student(user.Username, 1);
+                                    var match = Students45.Find(check => check.GetName() == temp.GetName());
+                                    if (match != null)
+                                    {
+                                        int newcum = match.GetCumulative();
+                                        newcum++;
+                                        match.SetCumulative(newcum);
+                                    }
+                                    else
+                                    {
+                                        Students45.Add(temp);
+                                    }
+                                    Valid45Students.Add(user.Username);
+                                }
                             }
                         }
                     }
@@ -353,9 +499,36 @@ namespace WalkerBot.Modules
                             {
                                 if (user.Nickname != null)
                                 {
+                                    Student temp = new Student(user.Nickname, 1);
+                                    var match = Students1.Find(check => check.GetName() == temp.GetName());
+                                    if (match != null)
+                                    {
+                                        int newcum = match.GetCumulative();
+                                        newcum++;
+                                        match.SetCumulative(newcum);
+                                    }
+                                    else
+                                    {
+                                        Students1.Add(temp);
+                                    }
                                     Valid1Students.Add(user.Nickname);
                                 }
-                                else { Valid1Students.Add(user.Username); }
+                                else
+                                {
+                                    Student temp = new Student(user.Username, 1);
+                                    var match = Students1.Find(check => check.GetName() == temp.GetName());
+                                    if (match != null)
+                                    {
+                                        int newcum = match.GetCumulative();
+                                        newcum++;
+                                        match.SetCumulative(newcum);
+                                    }
+                                    else
+                                    {
+                                        Students1.Add(temp);
+                                    }
+                                    Valid1Students.Add(user.Username);
+                                }
                             }
                         }
                     }
@@ -365,7 +538,6 @@ namespace WalkerBot.Modules
                     Messages1.Add(msg.ToString());
                 }
 
-                // await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 Valid1Students.Sort();
                 using (var sw = new StreamWriter(FilePath1, false))
                 {
@@ -379,11 +551,10 @@ namespace WalkerBot.Modules
             }
             else if (ClassArg == 50)
             {
-                //await Context.Channel.SendMessageAsync($"{Valid41Students.Count}");
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "IS-50");
                 ulong LectureChannel = 795497426596921384;
                 ulong HelpChannel = 795497599598723114;
-                int limit = 100;
+                int limit = 150;
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 var templist = ChannelMessages.ToList();
                 templist.AddRange(await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync());
@@ -414,9 +585,36 @@ namespace WalkerBot.Modules
                             {
                                 if (user.Nickname != null)
                                 {
+                                    Student temp = new Student(user.Nickname, 1);
+                                    var match = Students50.Find(check => check.GetName() == temp.GetName());
+                                    if (match != null)
+                                    {
+                                        int newcum = match.GetCumulative();
+                                        newcum++;
+                                        match.SetCumulative(newcum);
+                                    }
+                                    else
+                                    {
+                                        Students50.Add(temp);
+                                    }
                                     Valid50Students.Add(user.Nickname);
                                 }
-                                else { Valid50Students.Add(user.Username); }
+                                else
+                                {
+                                    Student temp = new Student(user.Username, 1);
+                                    var match = Students50.Find(check => check.GetName() == temp.GetName());
+                                    if (match != null)
+                                    {
+                                        int newcum = match.GetCumulative();
+                                        newcum++;
+                                        match.SetCumulative(newcum);
+                                    }
+                                    else
+                                    {
+                                        Students50.Add(temp);
+                                    }
+                                    Valid50Students.Add(user.Username);
+                                }
                             }
                         }
                     }
