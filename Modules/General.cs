@@ -80,22 +80,24 @@ namespace WalkerBot.Modules
                 {
                     if (Valid41Students.Contains(GuildUser.Nickname))
                     {
-                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                        await Context.Channel.SendMessageAsync("You've already been accounted for.");
                     }
                     else if (!Valid41Students.Contains(GuildUser.Nickname))
                     {
                         Valid41Students.Add(GuildUser.Nickname);
+                        await Context.Channel.SendMessageAsync("You've been added.");
                     }
                 }
                 else
                 {
                     if (Valid41Students.Contains(GuildUser.Username))
                     {
-                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                        await Context.Channel.SendMessageAsync("You've already been accounted for.");
                     }
                     else if (!Valid41Students.Contains(GuildUser.Username))
                     {
                         Valid41Students.Add(GuildUser.Username);
+                        await Context.Channel.SendMessageAsync("You've been added.");
                     }
                 }
             }
@@ -105,22 +107,24 @@ namespace WalkerBot.Modules
                 {
                     if (Valid45Students.Contains(GuildUser.Nickname))
                     {
-                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                        await Context.Channel.SendMessageAsync("You've already been accounted for.");
                     }
                     else if (!Valid45Students.Contains(GuildUser.Nickname))
                     {
                         Valid45Students.Add(GuildUser.Nickname);
+                        await Context.Channel.SendMessageAsync("You've been added.");
                     }
                 }
                 else
                 {
                     if (Valid45Students.Contains(GuildUser.Username))
                     {
-                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                        await Context.Channel.SendMessageAsync("You've already been accounted for.");
                     }
                     else if (!Valid45Students.Contains(GuildUser.Username))
                     {
                         Valid45Students.Add(GuildUser.Username);
+                        await Context.Channel.SendMessageAsync("You've been added.");
                     }
                 }
             }
@@ -135,6 +139,7 @@ namespace WalkerBot.Modules
                     else if (!Valid1Students.Contains(GuildUser.Nickname))
                     {
                         Valid1Students.Add(GuildUser.Nickname);
+                        await Context.Channel.SendMessageAsync("You've been added.");
                     }
                 }
                 else
@@ -146,6 +151,7 @@ namespace WalkerBot.Modules
                     else if (!Valid1Students.Contains(GuildUser.Username))
                     {
                         Valid1Students.Add(GuildUser.Username);
+                        await Context.Channel.SendMessageAsync("You've been added.");
                     }
                 }
             }
@@ -160,6 +166,7 @@ namespace WalkerBot.Modules
                     else if (!Valid50Students.Contains(GuildUser.Nickname))
                     {
                         Valid50Students.Add(GuildUser.Nickname);
+                        await Context.Channel.SendMessageAsync("You've been added.");
                     }
                 }
                 else
@@ -171,6 +178,7 @@ namespace WalkerBot.Modules
                     else if (!Valid50Students.Contains(GuildUser.Username))
                     {
                         Valid50Students.Add(GuildUser.Username);
+                        await Context.Channel.SendMessageAsync("You've been added.");
                     }
                 }
             }
@@ -230,10 +238,10 @@ namespace WalkerBot.Modules
         {
             if (ClassArg == 41)
             {
-                Students41.Sort();
+                List<Student> Sorted = Students41.OrderBy(temp => temp.GetName()).ToList();
                 using (var sw = new StreamWriter(FilePath41Cumul, false))
                 {
-                    foreach (Student temp in Students41)
+                    foreach (Student temp in Sorted)
                     {
                         await sw.WriteLineAsync(temp.GetName() + temp.GetCumulative());
                     }
@@ -242,10 +250,10 @@ namespace WalkerBot.Modules
             }
             if (ClassArg == 45)
             {
-                Students45.Sort();
+                List<Student> Sorted = Students45.OrderBy(temp => temp.GetName()).ToList();
                 using (var sw = new StreamWriter(FilePath45Cumul, false))
                 {
-                    foreach (Student temp in Students45)
+                    foreach (Student temp in Sorted)
                     {
                         await sw.WriteLineAsync(temp.GetName() + temp.GetCumulative());
                     }
@@ -254,10 +262,10 @@ namespace WalkerBot.Modules
             }
             if (ClassArg == 1)
             {
-                Students1.Sort();
+                List<Student> Sorted = Students1.OrderBy(temp => temp.GetName()).ToList();
                 using (var sw = new StreamWriter(FilePath1Cumul, false))
                 {
-                    foreach (Student temp in Students1)
+                    foreach (Student temp in Sorted)
                     {
                         await sw.WriteLineAsync(temp.GetName() + temp.GetCumulative());
                     }
@@ -266,10 +274,10 @@ namespace WalkerBot.Modules
             }
             if (ClassArg == 50)
             {
-                Students50.Sort();
+                List<Student> Sorted = Students50.OrderBy(temp => temp.GetName()).ToList();
                 using (var sw = new StreamWriter(FilePath50Cumul, false))
                 {
-                    foreach (Student temp in Students41)
+                    foreach (Student temp in Sorted)
                     {
                         await sw.WriteLineAsync(temp.GetName() + temp.GetCumulative());
                     }
@@ -291,7 +299,7 @@ namespace WalkerBot.Modules
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-41");
                 ulong LectureChannel = 795497257671196683;
                 ulong HelpChannel = 795497568112607242;
-                int limit = 350;
+                int limit = 1000;
 
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 var templist = ChannelMessages.ToList();
@@ -364,6 +372,7 @@ namespace WalkerBot.Modules
                 }
 
                 Valid41Students.Sort();
+
                 using (var sw = new StreamWriter(FilePath41, false))
                 {
                     foreach (string temp in Valid41Students)
@@ -379,7 +388,7 @@ namespace WalkerBot.Modules
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-45");
                 ulong LectureChannel = 795497409873838121;
                 ulong HelpChannel = 795497584562929664;
-                int limit = 350;
+                int limit = 1000;
 
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 var templist = ChannelMessages.ToList();
@@ -452,6 +461,7 @@ namespace WalkerBot.Modules
                 }
 
                 Valid45Students.Sort();
+
                 using (var sw = new StreamWriter(FilePath45, false))
                 {
                     foreach (string temp in Valid45Students)
@@ -467,7 +477,7 @@ namespace WalkerBot.Modules
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "CSCI-1");
                 ulong LectureChannel = 795497373001711626;
                 ulong HelpChannel = 795497526299590696;
-                int limit = 200;
+                int limit = 950;
 
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 var templist = ChannelMessages.ToList();
@@ -539,6 +549,7 @@ namespace WalkerBot.Modules
                 }
 
                 Valid1Students.Sort();
+
                 using (var sw = new StreamWriter(FilePath1, false))
                 {
                     foreach (string temp in Valid1Students)
@@ -554,7 +565,7 @@ namespace WalkerBot.Modules
                 var role = guild.Roles.FirstOrDefault(x => x.Name == "IS-50");
                 ulong LectureChannel = 795497426596921384;
                 ulong HelpChannel = 795497599598723114;
-                int limit = 150;
+                int limit = 950;
                 var ChannelMessages = await guild.GetTextChannel(LectureChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync();
                 var templist = ChannelMessages.ToList();
                 templist.AddRange(await guild.GetTextChannel(HelpChannel).GetMessagesAsync(LastMessage.Id, Direction.Before, limit).FlattenAsync());
@@ -625,6 +636,7 @@ namespace WalkerBot.Modules
                 }
 
                 Valid50Students.Sort();
+
                 using (var sw = new StreamWriter(FilePath50, false))
                 {
                     foreach (string temp in Valid50Students)
