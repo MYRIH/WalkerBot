@@ -415,43 +415,46 @@ namespace WalkerBot.Modules
                     foreach (var msg in Valid45Messages)
                     {
                         var user = (msg.Author as SocketGuildUser);
-                        if (Valid45Students.Contains(user.Username) || Valid45Students.Contains(user.Nickname))
-                            continue;
-                        else
+                        if (user != null)
                         {
-                            if (user.Roles.Contains(role) && !user.IsBot)
+                            if (Valid45Students.Contains(user.Username) || Valid45Students.Contains(user.Nickname))
+                                continue;
+                            else
                             {
-                                if (user.Nickname != null)
+                                if (user.Roles.Contains(role) && !user.IsBot)
                                 {
-                                    Student temp = new Student(user.Nickname, 1);
-                                    var match = Students45.Find(check => check.GetName() == temp.GetName());
-                                    if (match != null)
+                                    if (user.Nickname != null)
                                     {
-                                        int newcum = match.GetCumulative();
-                                        newcum++;
-                                        match.SetCumulative(newcum);
+                                        Student temp = new Student(user.Nickname, 1);
+                                        var match = Students45.Find(check => check.GetName() == temp.GetName());
+                                        if (match != null)
+                                        {
+                                            int newcum = match.GetCumulative();
+                                            newcum++;
+                                            match.SetCumulative(newcum);
+                                        }
+                                        else
+                                        {
+                                            Students45.Add(temp);
+                                        }
+                                        Valid45Students.Add(user.Nickname);
                                     }
                                     else
                                     {
-                                        Students45.Add(temp);
+                                        Student temp = new Student(user.Username, 1);
+                                        var match = Students45.Find(check => check.GetName() == temp.GetName());
+                                        if (match != null)
+                                        {
+                                            int newcum = match.GetCumulative();
+                                            newcum++;
+                                            match.SetCumulative(newcum);
+                                        }
+                                        else
+                                        {
+                                            Students45.Add(temp);
+                                        }
+                                        Valid45Students.Add(user.Username);
                                     }
-                                    Valid45Students.Add(user.Nickname);
-                                }
-                                else
-                                {
-                                    Student temp = new Student(user.Username, 1);
-                                    var match = Students45.Find(check => check.GetName() == temp.GetName());
-                                    if (match != null)
-                                    {
-                                        int newcum = match.GetCumulative();
-                                        newcum++;
-                                        match.SetCumulative(newcum);
-                                    }
-                                    else
-                                    {
-                                        Students45.Add(temp);
-                                    }
-                                    Valid45Students.Add(user.Username);
                                 }
                             }
                         }
@@ -504,43 +507,46 @@ namespace WalkerBot.Modules
                     foreach (var msg in Valid1Messages)
                     {
                         var user = (msg.Author as SocketGuildUser);
-                        if (Valid1Students.Contains(user.Username) || Valid1Students.Contains(user.Nickname))
-                            continue;
-                        else
+                        if (user != null)
                         {
-                            if (user.Roles.Contains(role) && !user.IsBot)
+                            if (Valid1Students.Contains(user.Username) || Valid1Students.Contains(user.Nickname))
+                                continue;
+                            else
                             {
-                                if (user.Nickname != null)
+                                if (user.Roles.Contains(role) && !user.IsBot)
                                 {
-                                    Student temp = new Student(user.Nickname, 1);
-                                    var match = Students1.Find(check => check.GetName() == temp.GetName());
-                                    if (match != null)
+                                    if (user.Nickname != null)
                                     {
-                                        int newcum = match.GetCumulative();
-                                        newcum++;
-                                        match.SetCumulative(newcum);
+                                        Student temp = new Student(user.Nickname, 1);
+                                        var match = Students1.Find(check => check.GetName() == temp.GetName());
+                                        if (match != null)
+                                        {
+                                            int newcum = match.GetCumulative();
+                                            newcum++;
+                                            match.SetCumulative(newcum);
+                                        }
+                                        else
+                                        {
+                                            Students1.Add(temp);
+                                        }
+                                        Valid1Students.Add(user.Nickname);
                                     }
                                     else
                                     {
-                                        Students1.Add(temp);
+                                        Student temp = new Student(user.Username, 1);
+                                        var match = Students1.Find(check => check.GetName() == temp.GetName());
+                                        if (match != null)
+                                        {
+                                            int newcum = match.GetCumulative();
+                                            newcum++;
+                                            match.SetCumulative(newcum);
+                                        }
+                                        else
+                                        {
+                                            Students1.Add(temp);
+                                        }
+                                        Valid1Students.Add(user.Username);
                                     }
-                                    Valid1Students.Add(user.Nickname);
-                                }
-                                else
-                                {
-                                    Student temp = new Student(user.Username, 1);
-                                    var match = Students1.Find(check => check.GetName() == temp.GetName());
-                                    if (match != null)
-                                    {
-                                        int newcum = match.GetCumulative();
-                                        newcum++;
-                                        match.SetCumulative(newcum);
-                                    }
-                                    else
-                                    {
-                                        Students1.Add(temp);
-                                    }
-                                    Valid1Students.Add(user.Username);
                                 }
                             }
                         }
@@ -591,43 +597,46 @@ namespace WalkerBot.Modules
                     foreach (var msg in Valid50Messages)
                     {
                         var user = (msg.Author as SocketGuildUser);
-                        if (Valid50Students.Contains(user.Username) || Valid50Students.Contains(user.Nickname))
-                            continue;
-                        else
+                        if (user != null)
                         {
-                            if (user.Roles.Contains(role) && !user.IsBot)
+                            if (Valid50Students.Contains(user.Username) || Valid50Students.Contains(user.Nickname))
+                                continue;
+                            else
                             {
-                                if (user.Nickname != null)
+                                if (user.Roles.Contains(role) && !user.IsBot)
                                 {
-                                    Student temp = new Student(user.Nickname, 1);
-                                    var match = Students50.Find(check => check.GetName() == temp.GetName());
-                                    if (match != null)
+                                    if (user.Nickname != null)
                                     {
-                                        int newcum = match.GetCumulative();
-                                        newcum++;
-                                        match.SetCumulative(newcum);
+                                        Student temp = new Student(user.Nickname, 1);
+                                        var match = Students50.Find(check => check.GetName() == temp.GetName());
+                                        if (match != null)
+                                        {
+                                            int newcum = match.GetCumulative();
+                                            newcum++;
+                                            match.SetCumulative(newcum);
+                                        }
+                                        else
+                                        {
+                                            Students50.Add(temp);
+                                        }
+                                        Valid50Students.Add(user.Nickname);
                                     }
                                     else
                                     {
-                                        Students50.Add(temp);
+                                        Student temp = new Student(user.Username, 1);
+                                        var match = Students50.Find(check => check.GetName() == temp.GetName());
+                                        if (match != null)
+                                        {
+                                            int newcum = match.GetCumulative();
+                                            newcum++;
+                                            match.SetCumulative(newcum);
+                                        }
+                                        else
+                                        {
+                                            Students50.Add(temp);
+                                        }
+                                        Valid50Students.Add(user.Username);
                                     }
-                                    Valid50Students.Add(user.Nickname);
-                                }
-                                else
-                                {
-                                    Student temp = new Student(user.Username, 1);
-                                    var match = Students50.Find(check => check.GetName() == temp.GetName());
-                                    if (match != null)
-                                    {
-                                        int newcum = match.GetCumulative();
-                                        newcum++;
-                                        match.SetCumulative(newcum);
-                                    }
-                                    else
-                                    {
-                                        Students50.Add(temp);
-                                    }
-                                    Valid50Students.Add(user.Username);
                                 }
                             }
                         }
