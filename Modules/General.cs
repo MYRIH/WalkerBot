@@ -45,6 +45,8 @@ namespace WalkerBot.Modules
         public static List<Student> Students50 = new List<Student> { };
         public static List<Student> Students1 = new List<Student> { };
 
+        public static List<string> WorkShopStudentsNames = new List<string> { };
+
         public static List<string> Valid41Students = new List<string> { };
         public static List<string> Valid45Students = new List<string> { };
         public static List<string> Valid1Students = new List<string> { };
@@ -62,6 +64,8 @@ namespace WalkerBot.Modules
         public string FilePath1 = @"C:\Dev\WalkerBot\WalkerBot\1Students.txt";
         public string FilePath50 = @"C:\Dev\WalkerBot\WalkerBot\50Students.txt";
 
+        public string FilePathWKShp = @"C:\Dev\WalkerBot\WalkerBot\WorkShopAttendance.txt";
+
         public string FilePath41Cumul = @"C:\Dev\WalkerBot\WalkerBot\41StudentsCumul.txt";
         public string FilePath45Cumul = @"C:\Dev\WalkerBot\WalkerBot\45StudentsCumul.txt";
         public string FilePath1Cumul = @"C:\Dev\WalkerBot\WalkerBot\1StudentsCumul.txt";
@@ -70,115 +74,65 @@ namespace WalkerBot.Modules
         public General(ILogger<General> NewLogger)
             => Logger = NewLogger;
 
-        [Command("here")]
-        public async Task Here()
+        public static bool first = false;
+
+        [Command("wkshp")]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
+        public async Task WorkShopAttendance()
         {
-            var GuildUser = Context.User as SocketGuildUser;
-            if (GuildUser.Roles.Contains(Context.Guild.Roles.FirstOrDefault(x => x.Name == "CSCI-41")))
+            if (first)
             {
-                if (GuildUser.Nickname != null)
+                using (var sw = new StreamWriter(FilePathWKShp, false))
                 {
-                    if (Valid41Students.Contains(GuildUser.Nickname))
+                    foreach (string temp in WorkShopStudentsNames)
                     {
-                        await Context.Channel.SendMessageAsync("You've already been accounted for.");
-                    }
-                    else if (!Valid41Students.Contains(GuildUser.Nickname))
-                    {
-                        Valid41Students.Add(GuildUser.Nickname);
-                        await Context.Channel.SendMessageAsync("You've been added.");
+                        await sw.WriteLineAsync(temp);
                     }
                 }
-                else
-                {
-                    if (Valid41Students.Contains(GuildUser.Username))
-                    {
-                        await Context.Channel.SendMessageAsync("You've already been accounted for.");
-                    }
-                    else if (!Valid41Students.Contains(GuildUser.Username))
-                    {
-                        Valid41Students.Add(GuildUser.Username);
-                        await Context.Channel.SendMessageAsync("You've been added.");
-                    }
-                }
+                WorkShopStudentsNames.Clear();
+                first = false;
+                await Context.Channel.SendFileAsync(FilePathWKShp);
             }
-            else if (GuildUser.Roles.Contains(Context.Guild.Roles.FirstOrDefault(x => x.Name == "CSCI-45")))
+            else
             {
-                if (GuildUser.Nickname != null)
-                {
-                    if (Valid45Students.Contains(GuildUser.Nickname))
-                    {
-                        await Context.Channel.SendMessageAsync("You've already been accounted for.");
-                    }
-                    else if (!Valid45Students.Contains(GuildUser.Nickname))
-                    {
-                        Valid45Students.Add(GuildUser.Nickname);
-                        await Context.Channel.SendMessageAsync("You've been added.");
-                    }
-                }
-                else
-                {
-                    if (Valid45Students.Contains(GuildUser.Username))
-                    {
-                        await Context.Channel.SendMessageAsync("You've already been accounted for.");
-                    }
-                    else if (!Valid45Students.Contains(GuildUser.Username))
-                    {
-                        Valid45Students.Add(GuildUser.Username);
-                        await Context.Channel.SendMessageAsync("You've been added.");
-                    }
-                }
+                first = true;
             }
-            else if (GuildUser.Roles.Contains(Context.Guild.Roles.FirstOrDefault(x => x.Name == "CSCI-1")))
+        }
+
+        [Command("here")]
+        public async Task Here(int arg)
+        {
+            if (Context.Channel.Id == 795497906978684929)
             {
-                if (GuildUser.Nickname != null)
+                if (first)
                 {
-                    if (Valid1Students.Contains(GuildUser.Nickname))
+                    var GuildUser = Context.User as SocketGuildUser;
+                    string name;
+                    if (GuildUser.Nickname != null)
                     {
-                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
+                        if (WorkShopStudentsNames.Contains(GuildUser.Nickname))
+                        {
+                            await Context.Channel.SendMessageAsync("You've already been accounted for.");
+                        }
+                        else
+                        {
+                            name = $"{GuildUser.Nickname}  {arg}";
+                            WorkShopStudentsNames.Add(name);
+                            await Context.Channel.SendMessageAsync("You've been added.");
+                        }
                     }
-                    else if (!Valid1Students.Contains(GuildUser.Nickname))
+                    else if (GuildUser.Username != null)
                     {
-                        Valid1Students.Add(GuildUser.Nickname);
-                        await Context.Channel.SendMessageAsync("You've been added.");
-                    }
-                }
-                else
-                {
-                    if (Valid1Students.Contains(GuildUser.Username))
-                    {
-                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
-                    }
-                    else if (!Valid1Students.Contains(GuildUser.Username))
-                    {
-                        Valid1Students.Add(GuildUser.Username);
-                        await Context.Channel.SendMessageAsync("You've been added.");
-                    }
-                }
-            }
-            else if (GuildUser.Roles.Contains(Context.Guild.Roles.FirstOrDefault(x => x.Name == "IS-50")))
-            {
-                if (GuildUser.Nickname != null)
-                {
-                    if (Valid50Students.Contains(GuildUser.Nickname))
-                    {
-                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
-                    }
-                    else if (!Valid50Students.Contains(GuildUser.Nickname))
-                    {
-                        Valid50Students.Add(GuildUser.Nickname);
-                        await Context.Channel.SendMessageAsync("You've been added.");
-                    }
-                }
-                else
-                {
-                    if (Valid50Students.Contains(GuildUser.Username))
-                    {
-                        await Context.Channel.SendMessageAsync("You're already been accounted for.");
-                    }
-                    else if (!Valid50Students.Contains(GuildUser.Username))
-                    {
-                        Valid50Students.Add(GuildUser.Username);
-                        await Context.Channel.SendMessageAsync("You've been added.");
+                        if (WorkShopStudentsNames.Contains(GuildUser.Username))
+                        {
+                            await Context.Channel.SendMessageAsync("You've already been accounted for.");
+                        }
+                        else
+                        {
+                            name = $"{GuildUser.Username}  {arg}";
+                            WorkShopStudentsNames.Add(name);
+                            await Context.Channel.SendMessageAsync("You've been added.");
+                        }
                     }
                 }
             }
